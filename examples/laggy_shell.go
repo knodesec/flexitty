@@ -26,7 +26,7 @@ func test() error {
 		return err
 	}
 	// Make sure to close the pty at the end.
-	defer func() { _ = tty.PTY.Close() }() // Best effort.
+	defer tty.Close() // Best effort.
 
 	// Fixed PTY size for demo
 	tty.Resize(35, 50)
@@ -50,24 +50,17 @@ func test() error {
 			tty.InputChan <- data
 		}
 	}()
-	log.Printf("Starting chan range\n")
 	for data := range tty.OutputChan {
-		//log.Printf("Got data...\n")
 		for _, b := range data {
-			if b > 0x20 && b < 127 {
+			if b > 0x20 && b < 0x7E {
 				os.Stdout.Write([]byte{b})
 				time.Sleep(time.Millisecond * time.Duration(rand.Intn(MaxTypeDelay-MinTypeDelay+5)+MinTypeDelay))
 				continue
 			}
 			os.Stdout.Write([]byte{b})
 		}
-		//_, _ = os.Stdout.Write(data)
-		//time.Sleep(time.Second * 2)
 	}
 	log.Printf("Closing.\n")
-
-	//go func() { _, _ = io.Copy(tty.PTY, os.Stdin) }()
-	//_, _ = io.Copy(os.Stdout, tty.PTY)
 
 	return nil
 }
