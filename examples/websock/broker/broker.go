@@ -30,14 +30,14 @@ func (s *Session) AddWS(c *websocket.Conn) {
 				log.Println("WS read err: ", err)
 				break
 			}
-			log.Printf("WS recv: %s\n", message)
+			//log.Printf("WS recv: %s\n", message)
 			s.TTY.InputChan <- message
 		}
 	}()
 
 	go func() {
 		for data := range s.TTY.OutputChan {
-			log.Printf("Data from the TTY: %v\n", data)
+			//log.Printf("Data from the TTY: %v\n", data)
 			s.WS.WriteMessage(websocket.TextMessage, data)
 		}
 	}()
