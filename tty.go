@@ -89,6 +89,7 @@ func (t *TTY) Resize(width, height int) error {
 	}
 }
 
+// could unexport this
 func (t *TTY) StartChannels() {
 	go func() {
 		//log.Printf("Started go subroutine channel\n")
