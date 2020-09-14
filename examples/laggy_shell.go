@@ -21,12 +21,12 @@ func test() error {
 	rand.Seed(time.Now().UnixNano())
 
 	// Start the command with a pty.
-	tty, err := flexitty.New("zsh", []string{})
+	tty, err := flexitty.New("bash", []string{})
 	if err != nil {
 		return err
 	}
 	// Make sure to close the pty at the end.
-	defer tty.Close() // Best effort.
+	//defer tty.Close() // Best effort.
 
 	// Fixed PTY size for demo
 	tty.Resize(35, 50)
