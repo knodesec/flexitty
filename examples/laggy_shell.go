@@ -13,7 +13,7 @@ import (
 
 var (
 	MinTypeDelay = 10
-	MaxTypeDelay = 30
+	MaxTypeDelay = 70
 )
 
 func test() error {

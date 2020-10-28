@@ -81,6 +81,7 @@ func WebSockHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = broker.AddWS(vars["uuid"], c)
+	log.Printf("DEBUG: main.go - After AddWS, now have %d sockets in slice\n", len(broker.Sessions[0].WS))
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
