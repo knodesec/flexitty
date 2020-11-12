@@ -1,4 +1,4 @@
-module github.com/knodesec/flexitty
+module flexitty
 
 go 1.13
 
