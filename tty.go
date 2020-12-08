@@ -8,11 +8,13 @@ import (
 	"unsafe"
 
 	"github.com/creack/pty"
+	historybuf "github.com/knodesec/go-historybuffer"
 )
 
 type TTY struct {
 	Command string
 	Args    []string
+	History historybuf
 	cmd     *exec.Cmd
 	PTY     *os.File
 }
@@ -32,6 +34,7 @@ func New(command string, argv []string) (*TTY, error) {
 		Args:    argv,
 		cmd:     cmd,
 		PTY:     pty,
+		History: historybuf.New(4096),
 	}
 
 	return newTTY, nil
@@ -51,6 +54,11 @@ func (t *TTY) Read() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	_, err := t.History.Write(data)
+	if err != nil {
+		return nil, err
+	}
+
 	return data, nil
 }
 
