@@ -35,7 +35,7 @@ func New(command string, argv []string) (*TTY, error) {
 		cmd:     cmd,
 		PTY:     pty,
 	}
-	newTTY.History = historybuf.New(4096)
+	newTTY.History = historybuf.New(1024 * 1024)
 	return newTTY, nil
 }
 
