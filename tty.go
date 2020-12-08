@@ -14,7 +14,7 @@ import (
 type TTY struct {
 	Command string
 	Args    []string
-	History historybuf
+	History *historybuf.HistoryBuffer
 	cmd     *exec.Cmd
 	PTY     *os.File
 }
@@ -34,9 +34,8 @@ func New(command string, argv []string) (*TTY, error) {
 		Args:    argv,
 		cmd:     cmd,
 		PTY:     pty,
-		History: historybuf.New(4096),
 	}
-
+	newTTY.History = historybuf.New(4096)
 	return newTTY, nil
 }
 
@@ -54,7 +53,7 @@ func (t *TTY) Read() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err := t.History.Write(data)
+	_, err = t.History.Write(data)
 	if err != nil {
 		return nil, err
 	}
@@ -82,9 +81,8 @@ func (t *TTY) Resize(width, height int) error {
 	)
 	if errno != 0 {
 		return errno
-	} else {
-		return nil
 	}
+	return nil
 }
 
 func (t *TTY) Close() {
